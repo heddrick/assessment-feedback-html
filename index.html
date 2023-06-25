@@ -41,7 +41,7 @@
           }
         });
 
-        const generatedText = response.data;
+        const generatedText = response.data.status;
         responseElement.value = generatedText;
       } catch (error) {
         console.error(error);
