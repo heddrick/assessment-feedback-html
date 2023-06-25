@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OpenAI Text Generation Example</title>
+</head>
+<body>
+  <h1>OpenAI Text Generation Example</h1>
+  <form>
+    <label for="prompt">Enter a prompt:</label>
+    <br />
+    <textarea id="prompt" rows="5" cols="50"></textarea>
+    <br />
+    <button type="button" onclick="generate()">Generate</button>
+  </form>
+  <br />
+  <label for="response">Generated text:</label>
+  <br />
+  <textarea id="response" rows="5" cols="50" readonly></textarea>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    const api_key = '';
+    const url = 'https://api.openai.com/v1/completions';
+
+    const generate = async () => {
+      const prompt = document.getElementById('prompt').value;
+      const responseElement = document.getElementById('response');
+      responseElement.value = 'Generating...';
+
+      try {
+        const response = await axios.post(url, {
+          model: "text-davinci-003",
+          prompt: prompt,
+          max_tokens: 128,
+          temperature: 0,
+          stop: '\n',
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${api_key}`
+          }
+        });
+
+        const generatedText = response.data.choices[0].text.trim();
+        responseElement.value = generatedText;
+      } catch (error) {
+        console.error(error);
+        responseElement.value = 'Error generating text.';
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
