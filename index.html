@@ -1,51 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OpenAI Text Generation Example</title>
+  <title>UNC SON PASS Assesment Feedback Tool</title>
 </head>
-<body>
-  <h1>OpenAI Text Generation Example</h1>
+<body onload="pulse()">
+  <center>
+  <h1>UNC SON PASS Assessment Feedback Tool</h1>
   <form>
-    <label for="prompt">Enter a prompt:</label>
+    <label for="prompt">Assessment:</label>
     <br />
     <textarea id="prompt" rows="5" cols="50"></textarea>
     <br />
-    <button type="button" onclick="generate()">Generate</button>
+    <button id="button" type="button" onclick="generate()">Get Feedback</button>
   </form>
   <br />
-  <label for="response">Generated text:</label>
+  <label for="response">Feedback:</label>
   <br />
-  <textarea id="response" rows="5" cols="50" readonly></textarea>
-
+  <textarea id="response" rows="10" cols="50" readonly></textarea>
+  </center>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-    const api_key = '';
-    const url = 'https://assessment-feedback-backend-dept-son-passtool.apps.cloudapps.unc.edu/live';
+    const pulseUrl = 'http://localhost:8090/api/pulse'
 
-    const generate = async () => {
-      const prompt = document.getElementById('prompt').value;
-      const responseElement = document.getElementById('response');
-      responseElement.value = 'Generating...';
+    const pulse = async () => {
+      const promptElem   = document.getElementById('prompt'  );
+      const responseElem = document.getElementById('response');
+      const generateElem = document.getElementById('button'  );
+      
+      responseElem.value = 'Checking that the server is online...';
 
       try {
-        const response = await axios.post(url, {
-          model: "text-davinci-003",
-          prompt: prompt,
-          max_tokens: 128,
-          temperature: 0,
-          stop: '\n',
-        }, {
+        const response = await axios.get(pulseUrl, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${api_key}`
           }
         });
 
-        const generatedText = response.data.status;
-        responseElement.value = generatedText;
+        const pulseResult = response.data.result;
+        responseElem.value = '';
+
       } catch (error) {
         console.error(error);
-        responseElement.value = 'Error generating text.';
+        promptElem  .disabled = true;
+        generateElem.disabled = true;
+        responseElem.value  = 'The server is down.';
+      }
+    }
+    
+    const promptUrl  = 'http://localhost:8090/api/prompt'
+
+    const generate = async () => {
+      const promptValue  = document.getElementById('prompt'  ).value;
+      const responseElem = document.getElementById('response');
+
+      responseElem.value = 'Generating...';
+
+      try {
+        const response = await axios.post(promptUrl, {
+          prompt: promptValue
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        const generateResult = response.data.result;
+        responseElem.value = generateResult;
+
+      } catch (error) {
+        console.error(error);
+        responseElem.value = error.response.data.result.error.message;
       }
     }
   </script>
