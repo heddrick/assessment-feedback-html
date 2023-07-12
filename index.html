@@ -1,23 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>UNC SON PASS Assesment Feedback Tool</title>
 </head>
+<body>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UNC SON PASS Assesment Feedback Tool</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+      body {
+          background-color: #f2f2f2;
+          color: #333;
+      }
+
+      .container {
+          margin-top: 20px;
+          padding: 20px;
+          background-color: #fff;
+          box-shadow: 0 2px 4px rgba(0,0,0,.1);
+          border-radius: 5px;
+      }
+  </style>
+</head>
+
 <body onload="pulse()">
   <center>
   <h1>UNC SON PASS Assessment Feedback Tool</h1>
-  <form>
-    <label for="prompt">Assessment:</label>
-    <br />
-    <textarea id="prompt" rows="5" cols="50"></textarea>
-    <br />
-    <button id="button" type="button" onclick="generate()">Get Feedback</button>
-  </form>
-  <br />
-  <label for="response">Feedback:</label>
-  <br />
-  <textarea id="response" rows="10" cols="50" readonly></textarea>
   </center>
+  <div class="container">
+      <div class="row">
+          <div class="col-md-6">
+              <form>
+                <label for="prompt">Assessment:</label>
+                <br />
+                <textarea id="prompt" rows="20" cols="50"></textarea>
+                <br />
+                <button id="button" type="button" onclick="generate()">Get Feedback</button>
+              </form>
+          </div>
+          <div class="col-md-6">
+              <form>
+                <label for="response">Feedback:</label>
+                <br />
+                <textarea id="response" rows="20" cols="50" readonly></textarea>
+                <br />
+              </form>
+          </div>
+      </div>
+  </div>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     const pulseUrl = 'https://assessment-feedback-backend-dept-son-passtool.apps.cloudapps.unc.edu/api/pulse'
